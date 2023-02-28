@@ -11,11 +11,11 @@ and service type LoadBalancer.
 ## Quickstart
 for `ingressv1` use command below, but you can apply different ingress versions:
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/kuritka/demo/main/ingressv1/demo.yaml
+kubectl apply -f https://raw.githubusercontent.com/kuritka/demo/main/networking.k8s.io-v1/demo.yaml
 ```
 
 ```shell
-kubectl delete -f https://raw.githubusercontent.com/kuritka/demo/main/ingressv1/demo.yaml
+kubectl delete -f https://raw.githubusercontent.com/kuritka/demo/main/networking.k8s.io-v1/demo.yaml
 ```
 
 ## Ingress genesis

@@ -9,7 +9,7 @@ metadata:
   name: demo
   namespace: demo
 data:
-  DEFAULT_TEXT: "<h1>Success</h1><p>Ingress networking.k8s.io/v1beta1<br/> try /left and /right!</p>"
+  DEFAULT_TEXT: "<h1>Success</h1><p>Ingress <b>networking.k8s.io/v1</b><br/> try /left and /right!</p>"
   DEFAULT_EMOJI: "&#129668;"
   RIGHT_TEXT: "<h1>RIGHT</h1> <p>We received your purchase request;<br/> we will be in touch shortly!</p>"
   RIGHT_EMOJI: "&#128075;"
@@ -56,7 +56,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: busybox-web-bundle # 🔑
+      app: busybox-web-bundle
 ---
 apiVersion: v1
 kind: Service
@@ -89,7 +89,7 @@ spec:
   selector:
     app: busybox-web-bundle
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: demo-ingress
@@ -97,9 +97,11 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  backend:
-    serviceName: default-backend
-    servicePort: 80
+  defaultBackend:
+    service:
+      name: default-backend
+      port:
+        number: 80
   rules:
   - host: "demo.cloud.example.com"
     http:
@@ -107,10 +109,15 @@ spec:
       - pathType: Prefix
         path: "/left"
         backend:
-          serviceName: web-app
-          servicePort: 8080
+          service:
+            name: web-app
+            port:
+              number: 8080
       - pathType: Prefix
         path: "/right"
         backend:
-          serviceName: web-app
-          servicePort: 8081
+          service:
+            name: web-app
+            port:
+              number: 8081
+
