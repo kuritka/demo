@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo
+  namespace: demo
+data:
+  DEFAULT_TEXT: "<h1>Success</h1><p>This is default page;<br/> try /left and /right!</p>"
+  DEFAULT_EMOJI: "&#129668;"
+  RIGHT_TEXT: "<h1>RIGHT</h1> <p>We received your purchase request;<br/> we will be in touch shortly!</p>"
+  RIGHT_EMOJI: "&#128075;"
+  LEFT_TEXT: "<h1>LEFT</h1> <p>ready to eat?;<br/> squid will come shortly!</p>"
+  LEFT_EMOJI: "&#x1F991;"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: demo
+spec:
+  template:
+    metadata:
+      name: busybox
+      labels:
+        app: busybox-web-bundle
+    spec:
+      containers:
+      - name: helloapp
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args:
+        - "echo '<html> <head> <link href=https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap rel=stylesheet> </head> <style>body{text-align: center; padding: 40px 0; background: #EBF0F5;}h1{color: #88B04B; font-family: Nunito Sans, Helvetica Neue, sans-serif; font-weight: 900; font-size: 40px; margin-bottom: 10px;}p{color: #404F5E; font-family: Nunito Sans, Helvetica Neue, sans-serif; font-size:20px; margin: 0;}i{color: #9ABC66; font-size: 100px; line-height: 200px; margin-left:-15px;}.card{background: white; padding: 60px; border-radius: 4px; box-shadow: 0 2px 3px #C8D0D8; display: inline-block; margin: 0 auto;}</style> <body> <div class=card> <div style=border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;> <i class=checkmark>$(LEFT_EMOJI)</i> </div>$(LEFT_TEXT)</div></body></html>' > /var/www/index.html && httpd -f -p 8280 -h /var/www/"
+        envFrom:
+        - configMapRef:
+            name: demo
+      - name: greetingsapp
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args:
+        - "echo '<html> <head> <link href=https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap rel=stylesheet> </head> <style>body{text-align: center; padding: 40px 0; background: #EBF0F5;}h1{color: #88B04B; font-family: Nunito Sans, Helvetica Neue, sans-serif; font-weight: 900; font-size: 40px; margin-bottom: 10px;}p{color: #404F5E; font-family: Nunito Sans, Helvetica Neue, sans-serif; font-size:20px; margin: 0;}i{color: #9ABC66; font-size: 100px; line-height: 200px; margin-left:-15px;}.card{background: white; padding: 60px; border-radius: 4px; box-shadow: 0 2px 3px #C8D0D8; display: inline-block; margin: 0 auto;}</style> <body> <div class=card> <div style=border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;> <i class=checkmark>$(RIGHT_EMOJI)</i> </div>$(RIGHT_TEXT)</div></body></html>' > /var/www/index.html && httpd -f -p 8380 -h /var/www/"
+        envFrom:
+        - configMapRef:
+            name: demo
+      - name: backendapp
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args:
+        - "echo '<html> <head> <link href=https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap rel=stylesheet> </head> <style>body{text-align: center; padding: 40px 0; background: #EBF0F5;}h1{color: #88B04B; font-family: Nunito Sans, Helvetica Neue, sans-serif; font-weight: 900; font-size: 40px; margin-bottom: 10px;}p{color: #404F5E; font-family: Nunito Sans, Helvetica Neue, sans-serif; font-size:20px; margin: 0;}i{color: #9ABC66; font-size: 100px; line-height: 200px; margin-left:-15px;}.card{background: white; padding: 60px; border-radius: 4px; box-shadow: 0 2px 3px #C8D0D8; display: inline-block; margin: 0 auto;}</style> <body> <div class=card> <div style=border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;> <i class=checkmark>$(DEFAULT_EMOJI)</i> </div>$(DEFAULT_TEXT)</div></body></html>' > /var/www/index.html && httpd -f -p 8404 -h /var/www/"
+        envFrom:
+        - configMapRef:
+            name: demo
+  replicas: 2
+  selector:
+    matchLabels:
+      app: busybox-web-bundle # 🔑
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+  namespace: demo
+spec:
+  type: ClusterIP
+  ports:
+  - name: hello
+    port: 8080
+    targetPort: 8280
+  - name: greetings
+    port: 8081
+    targetPort: 8380
+  selector:
+    app: busybox-web-bundle
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-backend
+  namespace: demo
+spec:
+  type: ClusterIP
+  ports:
+  - name: hello
+    port: 80
+    targetPort: 8404
+  selector:
+    app: busybox-web-bundle
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  namespace: demo
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  defaultBackend:
+    service:
+      name: default-backend
+      port:
+        number: 80
+  rules:
+  - host: "demo-sdc-nonprod.caas.absa.co.za"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/left"
+        backend:
+          service:
+            name: web-app
+            port:
+              number: 8080
+      - pathType: Prefix
+        path: "/right"
+        backend:
+          service:
+            name: web-app
+            port:
+              number: 8081
+

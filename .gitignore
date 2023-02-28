@@ -1,0 +1,17 @@
+# Ignore everything
+*
+# But not these files...
+!/.gitignore
+
+!demo.yaml
+!Makefile
+!Dockerfile
+!.dockerignore
+
+!README.md
+!PROJECT
+!LICENSE
+!NOTES.md
+!CODEOWNERS
+# ...even if they are in subdirectories
+!*/
