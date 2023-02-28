@@ -103,7 +103,7 @@ spec:
       port:
         number: 80
   rules:
-  - host: "demo-sdc-nonprod.caas.absa.co.za"
+  - host: "demo.cloud.example.com"
     http:
       paths:
       - pathType: Prefix

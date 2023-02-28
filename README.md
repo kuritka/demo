@@ -11,8 +11,19 @@ and service type LoadBalancer.
 ## Quickstart
 for ingressv1 use this:
 ```shell
-kubectl apply -f https://github.com/kuritka/demo/ingressv1/demo.yaml
+kubectl apply -f https://raw.githubusercontent.com/kuritka/demo/main/ingressv1/demo.yaml
 ```
+
+```shell
+kubectl delete -f https://raw.githubusercontent.com/kuritka/demo/main/ingressv1/demo.yaml
+```
+
+Currently we support
+- ingressv1
+- ingressv1beta1
+- loadbalance
+
+ingress is configured to host `demo.cloud.example.com`
 
 ## Contribution
 any contribution is welcome.
