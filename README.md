@@ -1,21 +1,23 @@
 # DEM⭕
-The demo is used to deploy a super-simple web application for testing purposes - 
-primarily to test the accessibility of the application in your cluster. The whole 
-demo uses only the standard `busybox` image and the whole configuration is 
-in one `demo.yaml` file, so if you need to make modifications, you don't need to 
-configure other technologies.
 
-The goal of this project is to provide a demo for different versions of ingress 
-and service type LoadBalancer.
+<div align="center">
+ <img class="centerdoge" width="200px" alt="doge png" src="https://github.com/Lietsaki/Who-Is-Doge/blob/master/Images/Main%20Doge.png?raw=true">
+</div>
+
+The demo is used to deploy a super-simple web application for testing purposes.
+The goal of this project is to test accessibility for different versions of ingresses
+and service type LoadBalancer. The whole demo uses only the standard `busybox` image and the whole configuration is 
+in one `demo.yaml` file.
+
 
 ## Quickstart
 for `ingressv1` use command below, but you can apply different ingress versions:
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/kuritka/demo/main/networking.k8s.io-v1/demo.yaml
+kubectl apply -f https://github.com/kuritka/demo/blob/main/networking.k8s.io-v1/demo.yaml
 ```
 
 ```shell
-kubectl delete -f https://raw.githubusercontent.com/kuritka/demo/main/networking.k8s.io-v1/demo.yaml
+kubectl delete -f https://github.com/kuritka/demo/blob/main/networking.k8s.io-v1/demo.yaml
 ```
 
 ## Ingress genesis
@@ -25,12 +27,14 @@ Ingress@v1 was there since 1.19. See [[1]](https://cloud.google.com/kubernetes-e
 
 
 ## Support
-Currently we support
-- ingressv1
-- ingressv1beta1
-- loadbalance
 
-ingress is configured to host `demo.cloud.example.com`
+- networking.k8s.io/v1, extensions/v1beta1
+- networking.k8s.io/v1beta1
+- extensions/v1beta1
+- ~~loadbalance~~
+
+ingress is configured to host `demo.cloud.example.com`. You have to change it if you are 
+testing against another host.
 
 ## Contribution
 any contribution is welcome.
