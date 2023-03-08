@@ -1,4 +1,4 @@
-# DEM⭕
+# Ingress DEM⭕
 
 <div align="center">
  <img class="centerdoge" width="200px" alt="doge png" src="https://github.com/Lietsaki/Who-Is-Doge/blob/master/Images/Main%20Doge.png?raw=true">
@@ -13,10 +13,11 @@ to run the demo. In practice, you don't even need to clone the repository to run
 ## Quickstart
 for `ingressv1` use command below, but you can apply different ingress versions:
 ```shell
-export DEMO_HOST=demo.cloud.example.com && \
-export DEMO_DIR=networking.k8s.io-v1 && \
+DEMO_HOST=whatever.demo.cloud.example.com && \
+DEMO_DIR=networking.k8s.io-v1 && \
 kubectl apply -f https://raw.githubusercontent.com/kuritka/demo/main/$DEMO_DIR/demo.yaml && \
-kubectl -n demo patch ingress demo-ingress -p '{"spec":{"rules":[{"host":"'$DEMO_HOST'","http":{{}}}]}}'
+kubectl  -n demo patch ingress demo-ingress --type=json \
+-p='[{"op": "replace", "path": "/spec/rules/0/host", "value":"'$DEMO_HOST'"}]'
 ```
 
 ```shell
