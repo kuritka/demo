@@ -34,9 +34,9 @@ Ingress@v1 was there since 1.19. See [[1]](https://cloud.google.com/kubernetes-e
 
 ## Support
 
-- networking.k8s.io/v1, extensions/v1beta1
-- networking.k8s.io/v1beta1
-- extensions/v1beta1
+- networking.k8s.io-v1
+- networking.k8s.io-v1beta1
+- extensions-v1beta1
 - ~~ServiceType: Loadbalancer~~
 
 ingress is configured to host `demo.cloud.example.com`. You have to change it if you are 

@@ -104,13 +104,11 @@ spec:
   - host: "demo.cloud.example.com"
     http:
       paths:
-      - pathType: Prefix
-        path: "/left"
+      - path: "/left"
         backend:
           serviceName: web-app
           servicePort: 8080
-      - pathType: Prefix
-        path: "/right"
+      - path: "/right"
         backend:
           serviceName: web-app
           servicePort: 8081
