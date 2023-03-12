@@ -42,5 +42,12 @@ Ingress@v1 was there since 1.19. See [[1]](https://cloud.google.com/kubernetes-e
 ingress is configured to host `demo.cloud.example.com`. You have to change it if you are 
 testing against another host.
 
+## port-forward
+Although it is a secondary thing, it is good to see that the application runs at least port-forward. Run the following command and type http://localhost:8080 into your browser. If nothing is running on port 8080, you should see the demo. 
+
+```shell
+kubectl -n demo port-forward deployment/web-app 8080:8404
+```
+
 ## Contribution
 any contribution is welcome.
